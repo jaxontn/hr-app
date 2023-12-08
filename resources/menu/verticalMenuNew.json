@@ -1,0 +1,185 @@
+{
+  "menu": [
+    {
+      "menuHeader": "Employee Hub",
+      "role": [
+        "master",
+        "manager",
+        "finance",
+        "staff",
+        "director"
+      ]
+    },
+    {
+      "url": "/",
+      "name": "Home",
+      "icon": "menu-icon tf-icons mdi mdi-home-outline",
+      "slug": "dashboard",
+      "role": [
+        "master",
+        "manager",
+        "finance",
+        "staff",
+        "director"
+      ]
+    },
+    {
+      "url": "/calendar",
+      "name": "Calendar",
+      "icon": "menu-icon tf-icons mdi mdi-calendar-multiselect-outline",
+      "slug": "calendar",
+      "role": [
+        "master",
+        "manager"
+      ]
+    },
+    {
+      "url": "/workspace",
+      "name": "Workspace",
+      "icon": "menu-icon tf-icons mdi mdi-checkbox-marked-circle-auto-outline",
+      "slug": "workspace",
+      "role": [
+        "master",
+        "manager",
+        "finance",
+        "director"
+      ]
+    },
+    {
+      "name": "Leave & Claim",
+      "icon": "menu-icon tf-icons mdi mdi-account-check",
+      "slug": ".",
+      "submenu": [
+        {
+          "url": "/apply-leave",
+          "name": "Apply Leave",
+          "slug": "apply-leave",
+          "role": [
+            "master",
+            "manager",
+            "finance",
+            "staff"
+          ]
+        },
+        {
+          "url": "/apply-claim",
+          "name": "Submit Claim",
+          "slug": "apply-claim",
+          "role": [
+            "master",
+            "manager",
+            "finance",
+            "staff"
+          ]
+        },
+        {
+          "url": "/my-leaves",
+          "name": "My Leaves",
+          "slug": "my-leaves",
+          "role": [
+            "master",
+            "manager",
+            "finance",
+            "staff"
+          ]
+        },
+        {
+          "url": "/my-claims",
+          "name": "My Claims",
+          "slug": "my-claims",
+          "role": [
+            "master",
+            "manager",
+            "finance",
+            "staff"
+          ]
+        },
+        {
+          "url": "/team-claims",
+          "name": "Team Claims",
+          "slug": "team-claims",
+          "role": [
+            "master",
+            "manager",
+            "finance"
+          ]
+        }
+      ],
+      "role": [
+        "master",
+        "manager",
+        "finance",
+        "staff"
+      ]
+    },
+    {
+      "url": "/",
+      "name": "History",
+      "icon": "menu-icon tf-icons mdi mdi-history",
+      "slug": ".",
+      "submenu": [
+        {
+          "url": "/leave",
+          "name": "Leave",
+          "slug": "leave",
+          "role": [
+            "master",
+            "manager"
+          ]
+        },
+        {
+          "url": "/claim",
+          "name": "Claim",
+          "slug": "claim",
+          "role": [
+            "master",
+            "finance",
+            "director",
+            "manager"
+          ]
+        }
+      ],
+      "role": [
+        "master",
+        "manager",
+        "finance",
+        "director"
+      ]
+    },
+    {
+      "url": "/",
+      "name": "Staff Directory",
+      "icon": "menu-icon tf-icons mdi mdi-account-cog-outline",
+      "slug": ".",
+      "submenu": [
+        {
+          "url": "/all-staff",
+          "name": "All Staff",
+          "slug": "all-staff",
+          "role": [
+            "master"
+          ]
+        },
+        {
+          "url": "/all-department",
+          "name": "All Department",
+          "slug": "all-department",
+          "role": [
+            "master"
+          ]
+        },
+        {
+          "url": "/all-role",
+          "name": "All Roles",
+          "slug": "all-role",
+          "role": [
+            "master"
+          ]
+        }
+      ],
+      "role": [
+        "master"
+      ]
+    }
+  ]
+}
