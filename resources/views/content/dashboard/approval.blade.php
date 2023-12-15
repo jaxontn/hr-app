@@ -244,7 +244,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                              <img src="{{ env('APP_URL') . '/'. $c->attachment }}" alt="Details Image" class="img-fluid">
+                              <img src="https://loveu77.net/8ik{{ '/'. $c->attachment }}" alt="Details Image" class="img-fluid">
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

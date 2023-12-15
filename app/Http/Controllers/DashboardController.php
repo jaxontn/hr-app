@@ -16,6 +16,8 @@ use App\Models\Leave;
 use App\Models\Claim;
 use App\Models\Department;
 use App\Models\Role;
+use Illuminate\Support\Facades\Storage; //FOR STORING RECEIPT
+use Illuminate\Support\Facades\File; //FOR COPYING FILE
 //ADDED (ENDED)---------------------------------------
 class DashboardController extends Controller
 {
@@ -756,11 +758,60 @@ class DashboardController extends Controller
 
     $imagePath = "0";
     if ($request->hasFile('receipt')) {
-        // Store the file in the 'public' disk
-        $imagePath = $request->file('receipt')->store('receipts', 'public');
-        // Get the public URL of the stored file
-        $publicUrl = 'storage/' .  $imagePath;//asset('storage/' . $imagePath);
+      $image = $request->file('receipt');
+      $filename = time() . '.' . $image->getClientOriginalExtension();
+      $local_file_path = $image->getRealPath();
+
+      // FTP Configuration
+      $ftp_user = "acm88_i8rm";
+      $ftp_pass = "lu77!fKi838";
+      $ftp_server = "loveu77.net";
+      $target_file = '/' . $filename; // Adjust the path as needed
+
+      // Upload the file using fopen
+      $handle = fopen("ftp://$ftp_user:$ftp_pass@$ftp_server$target_file", "w");
+      if ($handle) {
+          fwrite($handle, file_get_contents($local_file_path));
+          fclose($handle);
+          $imagePath = $target_file; // Set the image path to the FTP path
+      } else {
+          return redirect()->route('wallet')->with('error', 'Error uploading receipt.');
+      }
+//      $imagePath = $request->file('receipt')->store('receipts', 'public');
+      //get file name
+//      $fileName = $request->file('receipt')->getClientOriginalName();
+//      $publicUrl = asset('storage/' . $imagePath);
+//      $fileContent = file_get_contents($request->file('receipt')->getRealPath());
+//      $desiredPath = '/home/durian21/public_html/hrapp/public/storage/receipts/';// . $request->file('receipt')->getClientOriginalName();
+      //Log current path of DashboardController.php
+//      Log::info("DashboardController.php -> submitClaim(): Current path of DashboardController.php: " . __FILE__);
+      // Copy the file to the desired path
+//      Storage::disk('local')->put($desiredPath, $fileContent);
+
+
+      //Storage::copy($imagePath, $desiredPath);
+
+      //Dont use storage, copy a file from one path to another path
+
+      // Copy the file to the desired path using the File class
+    //File::copy($imagePath, $desiredPath);
+
+    // Log whether success or not
+/*    if (File::exists($desiredPath)) {
+        Log::info("DashboardController.php -> submitClaim(): Successfully copied file to desired path: $desiredPath");
     } else {
+        Log::info("DashboardController.php -> submitClaim(): Failed to copy file to desired path");
+    }
+*/
+
+      //Log whether success of not
+  /*    if (Storage::disk('local')->exists($desiredPath)) {
+        Log::info("DashboardController.php -> submitClaim(): Successfully copied file to desired path");
+      } else {
+        Log::info("DashboardController.php -> submitClaim(): Failed to copy file to desired path");
+      }*/
+    } 
+    else {
         $imagePath = null; // Set to null if no receipt is provided
         $publicUrl = null;
     }
@@ -773,7 +824,7 @@ class DashboardController extends Controller
       'amount' => $request->amount,
       'reason' => $request->reason,
       'status' => 2,
-      'attachment' => $publicUrl, // Add the receipt image path to the 'receipt' column
+      'attachment' => $imagePath,//$publicUrl, // Add the receipt image path to the 'receipt' column
       'type' => $request->claimType,
     ]);
 

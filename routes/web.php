@@ -48,6 +48,12 @@ use App\Http\Controllers\tables\Basic as TablesBasic;
 use App\Http\Controllers\DashboardController;
 //ADDED (ENDED)---------------------------------------
 
+Route::get('/foo', function () {
+  Log::info('Called storage link');
+  Artisan::call('storage:link');
+  Log::info('Done storage Link');
+});
+
 //MASTER**************
 Route::middleware(['auth:staff', 'checkRole:master'])->group(function () {
   //ALL STAFF

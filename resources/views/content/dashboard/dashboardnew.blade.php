@@ -16,6 +16,26 @@
 
 @section('content')
 <div class="row gy-4">
+  <!--List of buttons succh as Apply Leave, Submit Claim-->
+
+
+    <div class="col-md-6 col-lg-3">
+      <a href="/apply-leave" class="btn btn-primary btn-block">Apply Leave</a>
+    </div>
+    <div class="col-md-6 col-lg-3">
+      <a href="/apply-claim" class="btn btn-primary btn-block">Submit Claim</a>
+    </div>
+    @if(optional(Auth::user())->therole->permission && (optional(Auth::user())->therole->permission == 'manager' || optional(Auth::user())->therole->permission == 'finance' || optional(Auth::user())->therole->permission == 'director' || optional(Auth::user())->therole->permission == 'master'))
+    <div class="col-md-6 col-lg-3">
+      <a href="/workspace" class="btn btn-primary btn-block">Claim Approval</a>
+    </div>
+    @endif
+    @if(optional(Auth::user())->therole->permission && (optional(Auth::user())->therole->permission == 'manager' || optional(Auth::user())->therole->permission == 'master'))
+    <div class="col-md-6 col-lg-3">
+      <a href="/workspace" class="btn btn-primary btn-block">Leave Approval</a>
+    </div>
+    @endif
+
   <!-- Congratulations card -->
   <div class="col-md-12 col-lg-4">
     <div class="card">
