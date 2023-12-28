@@ -199,7 +199,9 @@
                   <td class="text-truncate">{{ $staff->thedept->name ?? 'N/A' }}</td>
                   <td class="text-truncate">{{ $staff->contact ?? 'N/A' }}</td>
                   <td class="text-truncate">{{ $staff->totalLeave }}</td>
-                  <td class="text-truncate">{{ $staff->totalLeave - $staff->usedLeave }}</td>
+                  <td class="text-truncate">{{ max(0, $staff->totalLeave - $staff->usedLeave) }}</td>
+                  <!--If remaining leave = $staff->totalLeave - $staff->usedLeave is negative, show 0-->
+
                   {{--<td class="text-truncate">{{ $staff->usedLeave }}</td>--}}
                   <td class="text-truncate">{{ $staff->created_date }}</td>
                   <td>

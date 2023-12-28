@@ -58,7 +58,7 @@
       <div class="card-body">
         <h4 class="card-title mb-1">Hello {{ auth()->user()->username }}! 👋</h4>
         <p class="pb-0">Here's your <b>remaining</b> annual leave</p>
-        <h4 class="text-primary mb-1">{{ auth()->user()->totalLeave - auth()->user()->usedLeave }} Days in <?php echo date("Y"); ?></h4>
+        <h4 class="text-primary mb-1">{{ max(0, auth()->user()->totalLeave - auth()->user()->usedLeave) }} Days in <?php echo date("Y"); ?></h4>
         <p class="mb-2 pb-1">You've used up <b>{{ auth()->user()->usedLeave }}</b> days of your leave</p>
         <a href="/my-leaves" class="btn btn-sm btn-primary">My Leaves</a>
       </div>
