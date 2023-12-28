@@ -221,10 +221,9 @@
                         <a class="dropdown-item" href="/update-claim/{{$c->id}}/0" ><i class="mdi mdi-minus-circle me-1"></i> Reject</a>
                         @endif
                         @if(optional(Auth::user())->therole->permission && (optional(Auth::user())->therole->permission == 'finance'))
-                        <a class="dropdown-item" href="/update-claim/{{$c->id}}/6" ><i class="mdi mdi-minus-circle me-1"></i> Escalate</a>
-                        <a class="dropdown-item" href="/update-claim/{{$c->id}}/3" ><i class="mdi mdi-check-decagram me-1"></i> Approve</a>
+                        <a class="dropdown-item" href="/update-claim/{{$c->id}}/5" ><i class="mdi mdi-check-decagram me-1"></i> Reimbursed</a>
+                        <a class="dropdown-item" href="/update-claim/{{$c->id}}/6" ><i class="mdi mdi-arrow-up-bold-circle me-1"></i> Escalate</a>
                         <a class="dropdown-item" href="/update-claim/{{$c->id}}/4" ><i class="mdi mdi-minus-circle me-1"></i> Reject</a>
-                        <a class="dropdown-item" href="/update-claim/{{$c->id}}/5" ><i class="mdi mdi-minus-circle me-1"></i> Reimbursed</a>
                         @endif
                         @if(optional(Auth::user())->therole->permission && (optional(Auth::user())->therole->permission == 'director'))
                         <a class="dropdown-item" href="/update-claim/{{$c->id}}/7" ><i class="mdi mdi-check-decagram me-1"></i> Approve</a>

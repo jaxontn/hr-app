@@ -88,7 +88,7 @@
                   <th class="text-truncate">Reason</th>
                   <th class="text-truncate">Status</th>
                   <th class="text-truncate">Created</th>
-                  <th class="text-truncate">Action</th>
+                  {{--<th class="text-truncate">Action</th>--}}
                 </tr>
               </thead>
               <tbody>
@@ -128,15 +128,14 @@
                   </td>
 
                   <td>{{ $l->created_date }}</td>
-                  <td>
+                  {{--<td>
                     <div class="dropdown">
                       <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></button>
                       <div class="dropdown-menu">
                         <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#editLeave-{{ $l->id }}"><i class="mdi mdi-pencil-outline me-1"></i> Edit</a>
-                        {{--<a class="dropdown-item" href="javascript:void(0);" ><i class="mdi mdi-trash-can-outline me-1"></i> Delete</a>--}}
                       </div>
                     </div>
-                  </td>
+                  </td>--}}
                 </tr>
 
 

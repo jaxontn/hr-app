@@ -97,10 +97,13 @@
             <p><b>Reason:</b> <br>{{ $leave->reason }}</p>
             <div id="buttonSection">
                 <!-- Approve and Reject buttons in a single row -->
+                <!-- If leave status $leave->status is 1 hide the buttons -->
+                @if($leave->status != 1 && $leave->status != 0)
                 <div class="mb-3 d-flex justify-content-between">
                     <button class="btn btn-danger w-48" type="button" onclick="showPasswordInput(0)">Reject</button>
                     <button class="btn btn-success w-48" type="button" onclick="showPasswordInput(1)">Approve</button>
                 </div>
+                @endif
             </div>
 
             <!-- Password input and Confirm button -->

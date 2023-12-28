@@ -137,24 +137,33 @@
                 <!-- Approve and Reject buttons in a single row -->
                 <div class="mb-3 d-flex justify-content-between">
                   @if($staff->therole->permission == 'manager' || $staff->therole->permission == 'master')
+                  @if($claim->status != 1 && $claim->status != 0 && $claim->status != 4 && $claim->status != 5 && $claim->status != 6 && $claim->status != 7 && $claim->status != 8)
                   <button class="btn btn-danger w-48" type="button" onclick="showPasswordInput(0)">Reject</button>
                   <button class="btn btn-success w-48" type="button" onclick="showPasswordInput(1)">Approve</button>
                   @endif
-                  @if($staff->therole->permission == 'finance' || $staff->therole->permission == 'master')
-                  <button class="btn btn-danger w-48" type="button" onclick="showPasswordInput(4)">Reject</button>
-                  <button class="btn btn-success w-48" type="button" onclick="showPasswordInput(3)">Approve</button>
-
                   @endif
+
+                  @if($staff->therole->permission == 'finance' || $staff->therole->permission == 'master')
+                  @if($claim->status != 4 && $claim->status != 5 && $claim->status != 6 && $claim->status != 0 && $claim->status != 8 && $claim->status != 2)
+                  <button class="btn btn-danger w-48" type="button" onclick="showPasswordInput(4)">Reject</button>
+                  <!--<button class="btn btn-success w-48" type="button" onclick="showPasswordInput(3)">Approve</button>-->
+                  @endif
+                  @endif
+
                   @if($staff->therole->permission == 'director' || $staff->therole->permission == 'master')
+                  @if($claim->status != 0 && $claim->status != 1 && $claim->status != 2 && $claim->status != 4 && $claim->status != 5 && $claim->status != 7 && $claim->status != 8)
                   <button class="btn btn-danger w-48" type="button" onclick="showPasswordInput(8)">Reject</button>
                   <button class="btn btn-success w-48" type="button" onclick="showPasswordInput(7)">Approve</button>
+                  @endif
                   @endif
                 </div>
 
                 <div class="mb-3 d-flex justify-content-between">
                   @if($staff->therole->permission == 'finance' || $staff->therole->permission == 'master')
+                  @if($claim->status != 4 && $claim->status != 5 && $claim->status != 6 && $claim->status != 0 && $claim->status != 8 && $claim->status != 2)
                   <button class="btn btn-success w-48" type="button" onclick="showPasswordInput(5)">Reimbursed</button>
                   <button class="btn btn-success w-48" type="button" onclick="showPasswordInput(6)">Escalate</button>
+                  @endif
                   @endif
                 </div>
             </div>

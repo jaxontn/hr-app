@@ -212,7 +212,6 @@
                                             <option value="2" {{ "2" == $c->status ? 'selected' : '' }} >Pending</option>
                                             @endif
                                             @if(optional(Auth::user())->therole->permission && (optional(Auth::user())->therole->permission == 'finance' || optional(Auth::user())->therole->permission == 'master'))
-                                            <option value="3" {{ "3" == $c->status ? 'selected' : '' }} >Approved</option>
                                             <option value="4" {{ "4" == $c->status ? 'selected' : '' }} >Rejected</option>
                                             <option value="5" {{ "5" == $c->status ? 'selected' : '' }} >Reimbursed</option>
                                             <option value="6" {{ "6" == $c->status ? 'selected' : '' }} >Escalated</option>
