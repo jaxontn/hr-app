@@ -108,8 +108,12 @@
                       <input type="contact" class="form-control" id="contact" placeholder="+60123456789" name="contact" autocomplete="off" required="">
                   </div>
                   <div class="mb-3">
-                      <label for="totalLeave" class="form-label">Set Total Leave</label>
+                      <label for="totalLeave" class="form-label">Set Annual Leave</label>
                       <input type="totalLeave" class="form-control" id="totalLeave" placeholder="14" name="totalLeave" autocomplete="off" required="">
+                  </div>
+                  <div class="mb-3">
+                      <label for="totalMedLeave" class="form-label">Set Sick Leave</label>
+                      <input type="totalMedLeave" class="form-control" id="totalMedLeave" placeholder="14" name="totalMedLeave" autocomplete="off" required="">
                   </div>
                   <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
                   <button type="submit" class="btn btn-warning">Save changes</button>
@@ -145,9 +149,10 @@
                   <th class="text-truncate">Role</th>
                   <th class="text-truncate">Department</th>
                   <th class="text-truncate">Contact</th>
-                  <th class="text-truncate">Total Allocated Leave</th>
-                  <th class="text-truncate">Remaining Leave</th>
-                  {{--<th class="text-truncate">Used Leave</th>--}}
+                  <th class="text-truncate">Annual Leave</th>
+                  <th class="text-truncate">Remaining</th>
+                  <th class="text-truncate">Sick Leave</th>
+                  <th class="text-truncate">Remaining</th>
                   <th class="text-truncate">Created Date</th>
                   <th class="text-truncate">Actions</th>
                 </tr>
@@ -200,6 +205,8 @@
                   <td class="text-truncate">{{ $staff->contact ?? 'N/A' }}</td>
                   <td class="text-truncate">{{ $staff->totalLeave }}</td>
                   <td class="text-truncate">{{ max(0, $staff->totalLeave - $staff->usedLeave) }}</td>
+                  <td class="text-truncate">{{ $staff->totalMed }}</td>
+                  <td class="text-truncate">{{ max(0, $staff->totalMed - $staff->usedMed) }}</td>
                   <!--If remaining leave = $staff->totalLeave - $staff->usedLeave is negative, show 0-->
 
                   {{--<td class="text-truncate">{{ $staff->usedLeave }}</td>--}}
@@ -253,12 +260,20 @@
                                         </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="totalLeave" class="form-label">Configure Total Leave</label>
+                                        <label for="totalLeave" class="form-label">Configure Annual Leave</label>
                                         <input type="text" name="totalLeave" class="form-control" id="totalLeave-{{ $staff->id }}" placeholder="{{ $staff->totalLeave }}" value="{{ $staff->totalLeave }}" autocomplete="off" required="">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="usedLeave" class="form-label">Configure Used Leave</label>
+                                        <label for="usedLeave" class="form-label">Configure Used Annual Leave</label>
                                         <input type="text" name="usedLeave" class="form-control" id="usedLeave-{{ $staff->id }}" placeholder="{{ $staff->usedLeave }}" value="{{ $staff->usedLeave }}" autocomplete="off" required="">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="totalMed" class="form-label">Configure Sick Leave</label>
+                                        <input type="text" name="totalMed" class="form-control" id="totalMed-{{ $staff->id }}" placeholder="{{ $staff->totalMed }}" value="{{ $staff->totalMed }}" autocomplete="off" required="">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="usedMed" class="form-label">Configure Used Sick Leave</label>
+                                        <input type="text" name="usedMed" class="form-control" id="usedMed-{{ $staff->id }}" placeholder="{{ $staff->usedMed }}" value="{{ $staff->usedMed }}" autocomplete="off" required="">
                                     </div>
                                     <div class="mb-3">
                                         <label for="whatsapp" class="form-label">Update WhatsApp Number</label>

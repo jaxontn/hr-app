@@ -8,7 +8,7 @@ return [
   'templateVersion' => '1.0.0',
   'templateFree' => true,
   'templateDescription' =>
-    'Most Powerful & Comprehensive Bootstrap 5 HTML Admin Dashboard Template built for developers!',
+    'Most Powerful & Comprehensive Admin Dashboard!',
   'templateKeyword' =>
     'dashboard, bootstrap 5 dashboard, bootstrap 5 design, bootstrap 5, bootstrap 5 free, free admin template',
   'licenseUrl' => 'https://employeehub.com/license/',

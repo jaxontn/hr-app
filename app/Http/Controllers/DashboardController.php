@@ -16,6 +16,7 @@ use App\Models\Leave;
 use App\Models\Claim;
 use App\Models\Department;
 use App\Models\Role;
+use App\Models\EditLeave; //ADDED FOR EDITING LEAVE
 use Illuminate\Support\Facades\Storage; //FOR STORING RECEIPT
 use Illuminate\Support\Facades\File; //FOR COPYING FILE
 //ADDED (ENDED)---------------------------------------
@@ -54,6 +55,77 @@ class DashboardController extends Controller
     return view('content.authentications.login');
   }
 
+  public function showLoginFormCalendar()
+  {
+    //Log::info('entered showLoginForm()');
+    //access the auth middleware
+    if (Auth::guard('staff')->check()) {
+      //Log::info('entered showLoginForm() IF-statement');
+      //return redirect()->route('member');
+      //error_log the result
+      $staff = Auth::guard('staff')->user();
+      //Log::info("The value of showLoginForm \$Staff is: " . $staff . "\n");
+
+      //Log::info('DashboardController.php -> showLoginForm() -> $staff: ' . json_encode($staff) . "\n");
+
+      //----------------------------------------------------------------
+      if ($staff->role == 'finance') {
+        //return an external url pepsi888.com/report
+        //return redirect()->away('https://pepsi888.com/report');
+      }
+      //----------------------------------------------------------------
+      //return and do nothing
+      return redirect()->route('calendar');
+    }
+    return view('content.authentications.callogin');
+  }
+
+
+
+  public function leaveEdit($EditLeaveID, $id)
+  {
+    //Find the leave
+    $editleave = EditLeave::find($EditLeaveID);
+
+    //Find the staff
+    $staff = Staff::find($id);
+
+
+    $requested = $editleave->staff->id;
+
+    //for each unpaid leave, get the number of days and sum it all up, exclude weekends
+    $unpaidLeaveDays = 0;
+    $unpaidLeaves = Leave::where('staffid', $requested)
+      ->where('type', 4)
+      ->where('status', 1)
+      ->get();
+
+    foreach ($unpaidLeaves as $unpaidLeave) {
+      $startDate = strtotime($unpaidLeave->startDate);
+      $endDate = strtotime($unpaidLeave->endDate);
+      $datediff = $endDate - $startDate;
+      $days = round($datediff / (60 * 60 * 24)) + 1;
+      for ($i=0; $i<$days; $i++) {
+        $date = date('Y-m-d', strtotime($unpaidLeave->startDate . ' + ' . $i . ' days'));
+        if (date('N', strtotime($date)) < 6) {
+          $unpaidLeaveDays += 1;
+        }
+      }
+    }
+
+
+    
+    //get staff totaleave and usedleave
+    $totalLeave = $editleave->staff->totalLeave;
+    $usedLeave = $editleave->staff->usedLeave;
+    $totalMed = $editleave->staff->totalMed;
+    $usedMed = $editleave->staff->usedMed;
+
+    $remainingLeave = $totalLeave - $usedLeave;
+
+    return view('content.authentications.leaveedit', compact('editleave', 'staff', 'totalLeave', 'usedLeave', 'totalMed', 'usedMed', 'remainingLeave', 'unpaidLeaveDays'));
+  }
+
 
   public function leaveApproval($leaveID, $id)
   {
@@ -76,7 +148,73 @@ class DashboardController extends Controller
       }
     }
 
-    return view('content.authentications.leaveapproval', compact('leave', 'staff', 'weekDays'));
+    $requested = $leave->staff->id;
+    //Log::info("leaveApproval() -> \$requested: " . $requested);
+
+    //count all the leave where type is 1
+    $annualLeave = Leave::where('staffid', $requested)
+      ->where('type', 1)
+      ->where('status', 1)
+      ->get()
+      ->count();
+      
+    //count all the leave where type is 2, for sick leave
+    $sickLeave = Leave::where('staffid', $requested)
+      ->where('type', 2)
+      ->where('status', 1)
+      ->get()
+      ->count();
+
+    //count all the leave where type is 3, for emergency leave
+    $emergencyLeave = Leave::where('staffid', $requested)
+      ->where('type', 3)
+      ->where('status', 1)
+      ->get()
+      ->count();
+
+    //count all the leave where type is 4, for unpaid leave
+    $unpaidLeave = Leave::where('staffid', $requested)
+      ->where('type', 4)
+      ->where('status', 1)
+      ->get()
+      ->count();
+
+    //for each unpaid leave, get the number of days and sum it all up, exclude weekends
+    $unpaidLeaveDays = 0;
+    $unpaidLeaves = Leave::where('staffid', $requested)
+      ->where('type', 4)
+      ->where('status', 1)
+      ->get();
+
+    foreach ($unpaidLeaves as $unpaidLeave) {
+      $startDate = strtotime($unpaidLeave->startDate);
+      $endDate = strtotime($unpaidLeave->endDate);
+      $datediff = $endDate - $startDate;
+      $days = round($datediff / (60 * 60 * 24)) + 1;
+      for ($i=0; $i<$days; $i++) {
+        $date = date('Y-m-d', strtotime($unpaidLeave->startDate . ' + ' . $i . ' days'));
+        if (date('N', strtotime($date)) < 6) {
+          $unpaidLeaveDays += 1;
+        }
+      }
+    }
+
+
+    
+    //get staff totaleave and usedleave
+    $totalLeave = $leave->staff->totalLeave;
+    $usedLeave = $leave->staff->usedLeave;
+    $totalMed = $leave->staff->totalMed;
+    $usedMed = $leave->staff->usedMed;
+
+    $remainingLeave = $totalLeave - $usedLeave;
+
+    $remark = $leave->remark;
+
+
+
+    return view('content.authentications.leaveapproval', compact('leave', 'staff', 'weekDays', 'totalLeave', 'usedLeave', 'totalMed', 'usedMed', 'remainingLeave', 
+                                                                  'annualLeave', 'sickLeave', 'emergencyLeave', 'unpaidLeave', 'unpaidLeaveDays', 'remark'));
   }
 
 
@@ -89,6 +227,54 @@ class DashboardController extends Controller
     $staff = Staff::find($id);
 
     return view('content.authentications.claimapproval', compact('claim', 'staff'));
+  }
+
+
+  public function editLeaveBackend(Request $request, $EditLeaveID, $id)
+  {
+    //Find the leave
+    $editleave = EditLeave::find($EditLeaveID);
+
+    //Find the staff
+    $staff = Staff::find($id);
+
+    //Find the editLeave staff
+    $editLeaveStaff = Staff::find($editleave->staffid);
+
+    //Verify staff password
+    if (Hash::check($request->password . $staff->salt, $staff->encrypted_password)) {
+      //If password is correct, update the leave status based on submit button value
+
+      $editleave->status = $request->action;
+      $editleave->save();
+
+      Log::info("request->action: " . $request->action);
+      //if action is 1, add the request amount to the staff totalLeave
+      if($request->action == 1)
+      {
+        Log::info("editleave->action: " . $editleave->action);
+        //Log amount
+        Log::info("editleave->amount: " . $editleave->amount);
+        //if editleave action 1 is add, add the amount to the staff totalLeave
+        if($editleave->action == 1)
+        {
+          $editLeaveStaff->totalLeave += $editleave->amount;
+        } else if($editleave->action == 2)
+        {
+          //if editleave action 2 is deduct, deduct the amount from the staff totalLeave
+          $editLeaveStaff->totalLeave -= $editleave->amount;
+        }
+        $editLeaveStaff->save();
+      }
+
+      return redirect()
+        ->route('leave-edit', ['EditLeaveID' => $EditLeaveID, 'id' => $id])
+        ->withSuccess('Leave configuration updated');
+    } else {
+      return redirect()
+        ->route('leave-edit', ['EditLeaveID' => $EditLeaveID, 'id' => $id])
+        ->withSuccess('Password incorrect');
+    }
   }
 
 
@@ -105,6 +291,8 @@ class DashboardController extends Controller
       //If password is correct, update the leave status based on submit button value
 
       $leave->status = $request->action;
+      $leave->remark = $request->remark;
+      $leavetype = $leave->type;
       $leave->save();
       Log::info("request->action: " . $request->action);
         if($request->action == 1)
@@ -117,20 +305,46 @@ class DashboardController extends Controller
           $staff = Staff::find($leave->staffid);
 
 
-          //Log::info("startDate: " . $startDate);
-          //Log::info("endDate: " . $endDate);
-          //Log::info("datediff: " . $datediff);
-          //Log::info("days: " . $days);
+          Log::info("startDate: " . $startDate);
+          Log::info("endDate: " . $endDate);
+          Log::info("datediff: " . $datediff);
+          Log::info("days: " . $days);
 
 
-          //Update the usedLeave (exclude weekends)
-          for ($i=0; $i<$days; $i++) {
-            $date = date('Y-m-d', strtotime($leave->startDate . ' + ' . $i . ' days'));
-            //Log::info("date: " . $date);
-            if (date('N', strtotime($date)) < 6) {
-              $staff->usedLeave += 1;
-            }
+          if($leavetype == 1 || $leavetype == 3)
+          {
+              //Update the usedLeave (exclude weekends)
+              for ($i=0; $i<$days; $i++) {
+                $date = date('Y-m-d', strtotime($leave->startDate . ' + ' . $i . ' days'));
+                Log::info("date: " . $date);
+                if (date('N', strtotime($date)) < 6) {
+                  $staff->usedLeave += 1;
+                }
+              }
+
+              //if half day divide by half
+              if($leave->halfday == 1)
+              {
+                $staff->usedLeave -= 0.5;
+              }
+          } else if($leavetype == 2)
+          {
+              //Update the usedMed (exclude weekends)
+              for ($i=0; $i<$days; $i++) {
+                $date = date('Y-m-d', strtotime($leave->startDate . ' + ' . $i . ' days'));
+                Log::info("date: " . $date);
+                if (date('N', strtotime($date)) < 6) {
+                  $staff->usedMed += 1;
+                }
+              }
+
+              //if half day divide by half
+              if($leave->halfday == 1)
+              {
+                $staff->usedMed -= 0.5;
+              }
           }
+          
           $staff->save();
         }
 
@@ -197,10 +411,30 @@ class DashboardController extends Controller
         $url = "https://api.whatsapp.com/send?phone=" . $contact .
         "&text=Hi%20" . $manager->username . ",%20" .
         Auth::guard('staff')->user()->username .
-        "%20has%20applied%20for%20leave%20from%20" .
-        $leave->startDate . "%20to%20" .
-        $leave->endDate .
-        ".%20Please%20approve%20or%20reject%20the%20leave%20application%20at%20https://hrapp.durian888.com/leave-approval/" . $leave->id . "/" . $manager->id;
+        "%20applied%20a%20new%20leave:" .
+    //    $leave->startDate . "%20to%20" .
+    //    $leave->endDate .
+        "%20https://hrapp.durian888.com/leave-approval/" . $leave->id . "/" . $manager->id;
+      }
+
+      return redirect()->away($url);
+  }
+
+  public function editLeaveNumberReminder(Request $request, $id)
+  {
+      $editleave = EditLeave::find($id);
+
+      if ($editleave) {
+        //get the manager
+        $manager = Staff::find($request->input('manager'));
+        $contact = $manager->contact;
+
+        //contruct the whatsapp api with a url message
+        $url = "https://api.whatsapp.com/send?phone=" . $contact .
+        "&text=Hi%20" . $manager->username . ",%20" .
+        Auth::guard('staff')->user()->username .
+        "%20requested%20a%20new%20leave%20configuration:" .
+        "%20https://hrapp.durian888.com/leave-edit/" . $editleave->id . "/" . $manager->id;
       }
 
       return redirect()->away($url);
@@ -279,6 +513,46 @@ class DashboardController extends Controller
   }
 
 
+
+
+
+  public function calLoginBack(Request $request)
+  {
+    $request->validate([
+      'username' => 'required',
+      'password' => 'required',
+    ]);
+    Log::info('ENTERED loginBack()');
+
+    $credentials = $request->only('username', 'password');
+    $staff = Staff::where('username', $credentials['username'])->first();
+    //get all staff
+    $staffs = Staff::all();
+    $credentialsString = json_encode($credentials);
+    Log::info("The value of \$credentials is: " . $credentialsString);
+    Log::info("The value of \$Staff is: " . $staff);
+
+    if ($staff && Hash::check($credentials['password'] . $staff->salt, $staff->encrypted_password)) {
+      Auth::guard('staff')->login($staff);
+      //if staff is finance, redirect to finance page
+      if ($staff->role == 'finance') {
+        //return an external url pepsi888.com/report
+        // return redirect()->away('https://pepsi888.com/report');
+      }
+      return redirect()
+        ->route('calendar')
+        ->withSuccess('Signed in');
+    } else {
+      //Log::warning('Generated hash: ' . Hash::make($credentials['password'] . $staff->salt));
+      //Log::warning('Stored encrypted password: ' . $staff->encrypted_password);
+      //Log::warning('Stored salt: ' . $staff->salt);
+    }
+
+    //Log::warning('Authentication failed for user: ' . $credentials['username']);
+    return back()->withErrors([
+      'username' => 'The provided credentials do not match our records.',
+    ]);
+  }
 
 
 
@@ -399,6 +673,8 @@ class DashboardController extends Controller
         'department' => $request->input('dept'),
         'totalLeave' => $request->input('totalLeave'),
         'usedLeave' => $request->input('usedLeave'),
+        'totalMed' => $request->input('totalMed'),
+        'usedMed' => $request->input('usedMed'),
         'contact' => $request->input('whatsapp'),
         // Add other fields you want to update here
       ]);
@@ -531,6 +807,7 @@ class DashboardController extends Controller
       'department' => $request->dept,
       'contact' => $request->contact,
       'totalLeave' => $request->totalLeave,
+      'totalMed' => $request->totalMedLeave,
     ]);
 
     return redirect()
@@ -640,6 +917,9 @@ class DashboardController extends Controller
   {
     Log::info("DashboardController.php -> submitLeave() ");
 
+    //Log halfDay
+    Log::info("DashboardController.php -> submitLeave(): halfDay: " . $request->halfDay);
+
     //If start date is after end date
     if ($request->startDate > $request->endDate) {
       return redirect()
@@ -696,6 +976,15 @@ class DashboardController extends Controller
         ->withSuccess('Please select a leave type');
     }
 
+    //If halfday is 1, then make sure start date and end date is the same
+    if ($request->halfDay == 1) {
+      if ($request->startDate != $request->endDate) {
+        return redirect()
+          ->route('apply-leave')
+          ->withSuccess('Half day only valid for same day leave');
+      }
+    }
+
     //Add to Leave table
     Leave::create([
       'staffid' => Auth::guard('staff')->user()->id,
@@ -704,6 +993,7 @@ class DashboardController extends Controller
       'reason' => $request->reason,
       'status' => 2,
       'type' => $request->leaveType,
+      'halfday' => $request->halfDay
     ]);
 
     Log::info("DashboardController.php -> submitLeave(): Created Leave");
@@ -1079,6 +1369,56 @@ class DashboardController extends Controller
 
 
 
+
+
+    public function editLeave(){
+
+      $leave = EditLeave::where('staffid', Auth::guard('staff')->user()->id)->get();
+
+      //Get managers from the same department as the authenticated staff department
+      $managers = Staff::where('department', Auth::guard('staff')->user()->department)
+                  ->whereHas('therole', function ($query) {
+                      $query->where('permission', 'manager');
+                    })
+                  ->get();
+
+      $heading = "Leave Configuration Request";
+
+      return view('content.dashboard.editleave', compact('leave', 'managers', 'heading'));
+    }
+
+
+    public function updateLeaveNumber(Request $request){
+        //get the leaveType
+        $leaveType = $request->leaveType;
+        //get the numberofleaves
+        $numberofleaves = $request->numberOfLeaves;
+
+        //get the reason
+        $reason = $request->reason;
+
+
+        //Add to Leave table
+        EditLeave::create([
+          'staffid' => Auth::guard('staff')->user()->id,
+          'action' => $leaveType,
+          'amount' => $numberofleaves,
+          'reason' => $reason,
+          'status' => 2,
+        ]);
+
+        Log::info("DashboardController.php -> updateLeaveNumber(): Created Request");
+
+        return redirect()
+          ->route('edit-leave')
+          ->withSuccess('Request submitted');
+    }
+
+
+
+
+
+
     public function myClaims()
     {
       $claim = Claim::where('staffid', Auth::guard('staff')->user()->id)->get();
@@ -1182,16 +1522,100 @@ class DashboardController extends Controller
         }
       }
 
-
+      
       //Create an array to store all leaves data and convert it into JSON format
       $json = array();
       foreach ($leaves as $leave) {
+
+        // Add one day to the end date
+        $endDate = date('Y-m-d', strtotime($leave->endDate . ' +1 day'));
+
         $json[] = array(
           'title' => $leave->staff->username . ' - ' . $leave->reason,
           'start' => $leave->startDate,
-          'end' => $leave->endDate,
+          'end' => $endDate,//$leave->endDate, //add another day
+          'allDay' => true,
+          //leave type
+          'type' => $leave->type,
         );
       }
+
+      //for each array, if type is 1 or 3, add field 'backgroundColor' => 'red', bordercolor => 'red'
+      foreach ($json as $key => $value) {
+        if ($value['type'] == 2) {
+          $json[$key]['backgroundColor'] = 'red';
+          $json[$key]['borderColor'] = 'red';
+        }
+
+        if ($value['type'] == 3) {
+          $json[$key]['backgroundColor'] = 'red';
+          $json[$key]['borderColor'] = 'red';
+        }
+
+        //if type is 4, make it grey
+        if ($value['type'] == 4) {
+          $json[$key]['backgroundColor'] = 'black';
+          $json[$key]['borderColor'] = 'black';
+        }
+      }
+
+      //Log all jsoon
+      Log::info("DashboardController.php -> calendar(): json: " . json_encode($json));
+
       return view('content.dashboard.calendarnew', compact('json'));
+    }
+
+
+
+    public function viewCalendar($id)
+    {
+        //find the user from id
+        $staff = Staff::find($id);
+        
+        //find the staff department and get all leave from that department
+        $leaves = Leave::where('status', 1)
+                  ->whereHas('staff', function ($query) use ($staff) {
+                      $query->where('department', $staff->department);
+                    })
+                  ->get();
+
+        //Create an array to store all leaves data and convert it into JSON format
+        $json = array();
+        foreach ($leaves as $leave) {
+
+          // Add one day to the end date
+          $endDate = date('Y-m-d', strtotime($leave->endDate . ' +1 day'));
+
+          $json[] = array(
+            'title' => $leave->staff->username . ' - ' . $leave->reason,
+            'start' => $leave->startDate,
+            'end' => $endDate,//$leave->endDate, //add another day
+            'allDay' => true,
+            //leave type
+            'type' => $leave->type,
+          );
+        }
+
+        //for each array, if type is 1 or 3, add field 'backgroundColor' => 'red', bordercolor => 'red'
+        foreach ($json as $key => $value) {
+          if ($value['type'] == 2) {
+            $json[$key]['backgroundColor'] = 'red';
+            $json[$key]['borderColor'] = 'red';
+          }
+
+          if ($value['type'] == 3) {
+            $json[$key]['backgroundColor'] = 'red';
+            $json[$key]['borderColor'] = 'red';
+          }
+
+          //if type is 4, make it grey
+          if ($value['type'] == 4) {
+            $json[$key]['backgroundColor'] = 'black';
+            $json[$key]['borderColor'] = 'black';
+          }
+        }
+
+        Log::info("DashboardController.php -> viewCalendar(): json: " . json_encode($json));
+        return view('content.dashboard.viewcalendar', compact('json'));
     }
 }

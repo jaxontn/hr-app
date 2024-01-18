@@ -106,7 +106,7 @@
           <div class="col-sm-10">
             <div class="input-group input-group-merge">
               <span id="startDate2" class="input-group-text"><i class="mdi mdi-clock-time-eight-outline"></i></span>
-              <input type="datetime-local" id="startDate" name="startDate" class="form-control" required/>
+              <input type="date" id="startDate" name="startDate" class="form-control" required/>
             </div>
           </div>
         </div>
@@ -117,10 +117,25 @@
           <div class="col-sm-10">
             <div class="input-group input-group-merge">
               <span id="endDate2" class="input-group-text"><i class="mdi mdi-clock-time-eight-outline"></i></span>
-              <input type="datetime-local" id="endDate" name="endDate" class="form-control" required/>
+              <input type="date" id="endDate" name="endDate" class="form-control" required/>
             </div>
           </div>
         </div>
+
+        <!-- half day leave type selection -->
+        <div class="row mb-3">
+          <label class="col-sm-2 col-form-label" for="halfDay">Half Day?</label>
+          <div class="col-sm-10">
+            <div class="input-group input-group-merge">
+              <select class="form-select"  id="halfDay" name="halfDay" required>
+                <option disabled selected>Select an option </option>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+              </select>
+            </div>
+          </div>
+        </div>	
+
 
 
 

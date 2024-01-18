@@ -1,19 +1,10 @@
+@extends('layouts/blankLayout')
 
+@section('title', 'Calendar')
 
-@extends('layouts/contentNavbarLayout')
-
-@section('title', 'Calendar - On Leave')
-
-@section('vendor-style')
-<link rel="stylesheet" href="{{asset('assets/vendor/libs/apex-charts/apex-charts.css')}}">
-@endsection
-
-@section('vendor-script')
-<script src="{{asset('assets/vendor/libs/apex-charts/apexcharts.js')}}"></script>
-@endsection
-
-@section('page-script')
-<script src="{{asset('assets/js/dashboards-analytics.js')}}"></script>
+@section('page-style')
+<!-- Page -->
+<link rel="stylesheet" href="{{asset('assets/vendor/css/pages/page-auth.css')}}">
 @endsection
 
 @section('content')
@@ -68,8 +59,8 @@
   <h2 class="mt-4">Calendar - On Leave</h2>
   <div class="col-md-12">
   
-  <!-- Map Legend -->
-  <div class="legend-box">
+    <!-- Map Legend -->
+    <div class="legend-box">
       <div class="map-legend">
         Annual Leave <span class="legend-item" style="background-color: blue;"></span>
         Sick / Emergency Leave <span class="legend-item" style="background-color: red;"></span>
@@ -101,6 +92,7 @@
 
   .legend-item:nth-child(1) {
     background-color: #16b1ff !important;
+
   }
 
   .legend-item:nth-child(2) {
@@ -116,6 +108,7 @@
   }
 </style>
 <h3 class="mt-4" id='monthtitle'></h3>
+
       <div class="card">
           <div class="card-body">
               <div id='calendar'></div>
@@ -247,5 +240,4 @@
     border-color: #804be0 !important;
   }
 </style>
-
 @endsection

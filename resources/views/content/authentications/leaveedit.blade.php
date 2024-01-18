@@ -17,7 +17,7 @@
 
         <!--top right link to calendar-->
         <div class="text-end">
-            <a href="{{ url('/view/calendar/' . $leave->staff->id) }}" target="_blank" class="btn btn-outline-primary btn-sm">Calendar</a>
+            <a href="{{ url('/view/calendar/' . $editleave->staff->id) }}" target="_blank" class="btn btn-outline-primary btn-sm">Calendar</a>
         </div>
         <!-- Logo -->
         <div class="app-brand justify-content-center mt-5">
@@ -30,12 +30,11 @@
 
         <div class="card-body mt-2">
           <div class="text-center">
-            <h4 class="mb-2"><b>Leave Approval</b></h4>
-            <p class="mb-4">Requested by {{ $leave->staff->username }}</p>
-            <!--Include a link with underline to view staff leave details -->
+            <h4 class="mb-2"><b>Annual Leave Configuration</b></h4>
+            <p class="mb-4">Requested by {{ $editleave->staff->username }}</p>
             <p><a href="https://www.google.com.my" style="text-decoration: underline;" data-bs-toggle="modal" data-bs-target="#info">View Employee Info</a></p>
             <br>
-            @switch($leave->status)
+            @switch($editleave->status)
                           @case('2')
                               <p class="badge bg-label-warning rounded-pill">Pending</p>
                           @break
@@ -79,56 +78,32 @@
 
           </div>
 
-          <form id="leaveApprovalForm" class="mb-3" action="{{ route('submit-leave-approval', ['leaveID' => $leave->id, 'id' => $staff->id]) }}" method="POST">
+          <form id="leaveApprovalForm" class="mb-3" action="{{ route('submit-leave-edit', ['EditLeaveID' => $editleave->id, 'id' => $staff->id]) }}" method="POST">
             @csrf
-            <input type="hidden" name="leave_id" value="{{ $leave->id }}">
+            <input type="hidden" name="leave_id" value="{{ $editleave->id }}">
             <input type="hidden" name="action" value="" id="actionInput"> <!-- Add a hidden field for action -->
-
             <!-- Display leave details -->
-            <p><b>Start Date:</b> <br>{{ $leave->startDate }}</p>
-            <p><b>End Date:</b> <br>{{ $leave->endDate }}</p>
-            <p><b>Days: </b> <br>{{ $weekDays }} working days</p>
-            <p><b>Leave Type: </b> <br>
-                    @if($leave->type == 1)
-                        <span class="badge bg-label-primary rounded-pill">Annual Leave</span>
-                    @elseif($leave->type == 2)
-                        <span class="badge bg-label-primary rounded-pill">Sick Leave</span>
-                    @elseif($leave->type == 3)
-                        <span class="badge bg-label-primary rounded-pill">Emergency Leave</span>
-                    @elseif($leave->type == 4)
-                        <span class="badge bg-label-primary rounded-pill">Unpaid Leave</span>
+
+            <p><b>Action Type: </b> <br>
+                    @if($editleave->action == 1)
+                        <span class="badge bg-label-primary rounded-pill">Add</span>
+                    @elseif($editleave->action == 2)
+                        <span class="badge bg-label-primary rounded-pill">Deduct</span>
                     @else
                         <!-- Handle other cases or provide a default -->
                         <span class="badge bg-label-primary rounded-pill">undefined</span>
                     @endif
             </p>
-            <p><b>Half Day:</b> <br>
-                    @if($leave->halfday == 1)
-                        <span class="badge bg-label-primary rounded-pill">Yes</span>
-                    @else
-                        <span class="badge bg-label-primary rounded-pill">No</span>
-                    @endif
-            </p>
-            <p><b>Reason:</b> <br>{{ $leave->reason }}</p>
+            <p><b>Days:</b> <br>{{ $editleave->amount }}</p>
+            <p><b>Reason:</b> <br>{{ $editleave->reason }}</p>
             <div id="buttonSection">
-                
                 <!-- Approve and Reject buttons in a single row -->
-                <!-- If leave status $leave->status is 1 hide the buttons -->
-                @if($leave->status != 1 && $leave->status != 0)
-
-                <div class="mb-3">
-                    <div class="form-floating form-floating-outline">
-                    <textarea class="form-control" id="remark" name="remark" placeholder="Leave a remark here" style="height: 100px"></textarea>
-                    <label for="remark">Remark as {{ $staff->therole->permission }}</label>
-                    </div>
-                </div>
-
+                <!-- If leave status $editleave->status is 1 hide the buttons -->
+                @if($editleave->status != 1 && $editleave->status != 0)
                 <div class="mb-3 d-flex justify-content-between">
                     <button class="btn btn-danger w-48" type="button" onclick="showPasswordInput(0)">Reject</button>
                     <button class="btn btn-success w-48" type="button" onclick="showPasswordInput(1)">Approve</button>
                 </div>
-                @else
-                    <p><b>Remark by manager: </b> <br>{{ $remark }}</p>
                 @endif
             </div>
 
@@ -215,4 +190,5 @@
         </div>
     </div>
 </div>
+
 @endsection

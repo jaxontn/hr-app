@@ -78,7 +78,7 @@ Route::middleware(['auth:staff', 'checkRole:master'])->group(function () {
 //MASTER, MANAGER*******************
 Route::middleware(['auth:staff', 'checkRole:master,manager'])->group(function () {
   //CALENDAR
-  Route::get('/calendar', [DashboardController::class, 'calendar'])->name('calendar');
+  //Route::get('/calendar', [DashboardController::class, 'calendar'])->name('calendar');
 
   //WORKSPACE - LEAVE
   Route::get('/leave-approve/{id}', [DashboardController::class, 'approveLeave'])->name('leave-approve');
@@ -105,6 +105,10 @@ Route::middleware(['auth:staff', 'checkRole:master,manager,finance'])->group(fun
 
 //MASTER, MANAGER, FINANCE, STAFF******************
 Route::middleware(['auth:staff', 'checkRole:master,manager,finance,staff'])->group(function () {
+
+  //CALENDAR
+  Route::get('/calendar', [DashboardController::class, 'calendar'])->name('calendar');
+
   //APPLY LEAVE
   Route::get('/apply-leave', [DashboardController::class, 'applyLeave'])->name('apply-leave');
   Route::post('/submit-leave', [DashboardController::class, 'submitLeave'])->name('submit-leave');
@@ -118,8 +122,15 @@ Route::middleware(['auth:staff', 'checkRole:master,manager,finance,staff'])->gro
   //MY CLAIMS
   Route::get('/my-claims', [DashboardController::class, 'myClaims'])->name('my-claims');
 
+  //EDIT LEAVE
+  Route::get('/edit-leave', [DashboardController::class, 'editLeave'])->name('edit-leave');
+  Route::post('/update-leave-number', [DashboardController::class, 'updateLeaveNumber'])->name('update-leave-number');
+
   //LEAVE REMINDER
   Route::post('/leave-reminder/{id}', [DashboardController::class, 'leaveReminder'])->name('leave-reminder');
+
+  //EDIT LEAVE NUMBER REMINDER
+  Route::post('/edit-leave-number-reminder/{id}', [DashboardController::class, 'editLeaveNumberReminder'])->name('edit-leave-number-reminder');
 
   //CLAIM REMINDER
   Route::post('/claim-reminder/{id}', [DashboardController::class, 'claimReminder'])->name('claim-reminder');
@@ -153,7 +164,10 @@ Route::middleware(['auth:staff', 'checkRole:master,manager,finance,staff,directo
 
 //ADDED (STARTED)-----------------------------------------------------------------------
 Route::get('/', [DashboardController::class, 'showLoginForm'])->name('/');
+Route::get('/auth/calendar', [DashboardController::class, 'showLoginFormCalendar'])->name('auth-calendar');
+Route::get('/view/calendar/{id}', [DashboardController::class, 'viewCalendar'])->name('view-calendar');
 Route::post('login-back', [DashboardController::class, 'loginBack'])->name('login-back');
+Route::post('cal-login-back', [DashboardController::class, 'calLoginBack'])->name('cal-login-back');
 Route::post('/logout', [DashboardController::class, 'signOut'])->name('logout');
 //Route::get('/login', [LoginBasic::class, 'index'])->name('login');
 Route::get('/register', [RegisterBasic::class, 'index'])->name('register');
@@ -161,7 +175,9 @@ Route::get('/forgot-password', [ForgotPasswordBasic::class, 'index'])->name('for
 
 
 Route::get('/leave-approval/{leaveID}/{id}', [DashboardController::class, 'leaveApproval'])->name('leave-approval');
+Route::get('/leave-edit/{EditLeaveID}/{id}', [DashboardController::class, 'leaveEdit'])->name('leave-edit');
 Route::post('/submit-leave-approval/{leaveID}/{id}', [DashboardController::class, 'approveOrRejectLeave'])->name('submit-leave-approval');
+Route::post('/submit-leave-edit/{EditLeaveID}/{id}', [DashboardController::class, 'editLeaveBackend'])->name('submit-leave-edit');
 
 Route::get('/claim-approval/{claimID}/{id}', [DashboardController::class, 'claimApproval'])->name('claim-approval');
 Route::post('/submit-claim-approval/{claimID}/{id}', [DashboardController::class, 'approveOrRejectClaim'])->name('submit-claim-approval');

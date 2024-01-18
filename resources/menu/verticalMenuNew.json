@@ -30,7 +30,8 @@
       "slug": "calendar",
       "role": [
         "master",
-        "manager"
+        "manager",
+        "staff"
       ]
     },
     {
@@ -102,6 +103,16 @@
             "master",
             "manager",
             "finance"
+          ]
+        },
+        {
+          "url": "/edit-leave",
+          "name": "Edit Leave",
+          "slug": "edit-leave",
+          "role": [
+            "master",
+            "staff",
+            "manager"
           ]
         }
       ],

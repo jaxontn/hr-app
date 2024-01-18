@@ -83,6 +83,7 @@
                   <th class="text-truncate">ID</th>
                   <th class="text-truncate">Staff</th>
                   <th class="text-truncate">Type</th>
+                  <th class="text-truncate">Half Day</th>
                   <th class="text-truncate">Start Date</th>
                   <th class="text-truncate">End Date</th>
                   <th class="text-truncate">Reason</th>
@@ -109,6 +110,14 @@
                     @else
                         <!-- Handle other cases or provide a default -->
                         <span class="badge bg-label-primary rounded-pill">undefined</span>
+                    @endif
+                  </td>
+                  <!--half day-->
+                  <td>
+                    @if($l->halfday == 1)
+                        <span class="badge bg-label-primary rounded-pill">Yes</span>
+                    @else
+                        <span class="badge bg-label-primary rounded-pill">No</span>
                     @endif
                   </td>
                   <td>{{ $l->startDate }}</td>
