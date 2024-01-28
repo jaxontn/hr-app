@@ -152,8 +152,8 @@
             borderColor: 'green', // Set the border color
         },
         {
-            title: 'Nuzul Al-Quran',
-            start: '2024-03-28',
+            title: 'Good Friday',
+            start: '2024-03-29',
             allDay: true,
             backgroundColor: 'green', // Set a different color for holidays
             borderColor: 'green', // Set the border color
@@ -182,6 +182,104 @@
         {
             title: 'Wesak Day',
             start: '2024-05-22',
+            allDay: true,
+            backgroundColor: 'green', // Set a different color for holidays
+            borderColor: 'green', // Set the border color
+        },
+        {
+            title: 'Hari Gawai',
+            start: '2024-06-01',
+            allDay: true,
+            backgroundColor: 'green', // Set a different color for holidays
+            borderColor: 'green', // Set the border color
+        },
+        {
+            title: 'Hari Gawai Holiday',
+            start: '2024-06-02',
+            allDay: true,
+            backgroundColor: 'green', // Set a different color for holidays
+            borderColor: 'green', // Set the border color
+        },
+        {
+            title: 'Agong\'s Birthday',
+            start: '2024-06-03',
+            allDay: true,
+            backgroundColor: 'green', // Set a different color for holidays
+            borderColor: 'green', // Set the border color
+        },
+        {
+            title: 'Hari Gawai Holiday',
+            start: '2024-06-04',
+            allDay: true,
+            backgroundColor: 'green', // Set a different color for holidays
+            borderColor: 'green', // Set the border color
+        },
+        {
+            title: 'Hari Raya Haji',
+            start: '2024-06-17',
+            allDay: true,
+            backgroundColor: 'green', // Set a different color for holidays
+            borderColor: 'green', // Set the border color
+        },
+        {
+            title: 'Awal Muharram',
+            start: '2024-07-07',
+            allDay: true,
+            backgroundColor: 'green', // Set a different color for holidays
+            borderColor: 'green', // Set the border color
+        },
+        {
+            title: 'Awal Muharram Holiday',
+            start: '2024-07-08',
+            allDay: true,
+            backgroundColor: 'green', // Set a different color for holidays
+            borderColor: 'green', // Set the border color
+        },
+        {
+            title: 'Sarawak Day',
+            start: '2024-07-22',
+            allDay: true,
+            backgroundColor: 'green', // Set a different color for holidays
+            borderColor: 'green', // Set the border color
+        },
+        {
+            title: 'Merdeka Day',
+            start: '2024-08-31',
+            allDay: true,
+            backgroundColor: 'green', // Set a different color for holidays
+            borderColor: 'green', // Set the border color
+        },
+        {
+            title: 'Prophet Muhammad\'s Birthday',
+            start: '2024-09-16',
+            allDay: true,
+            backgroundColor: 'green', // Set a different color for holidays
+            borderColor: 'green', // Set the border color
+        },
+        {
+            title: 'Malaysia Day',
+            start: '2024-09-16',
+            allDay: true,
+            backgroundColor: 'green', // Set a different color for holidays
+            borderColor: 'green', // Set the border color
+        },
+        {
+            title: 'Malaysia Day Holiday',
+            start: '2024-09-17',
+            allDay: true,
+            backgroundColor: 'green', // Set a different color for holidays
+            borderColor: 'green', // Set the border color
+        },
+        {
+            title: 'Sarawak Governor\'s Birthday',
+            start: '2024-10-12',
+            allDay: true,
+            backgroundColor: 'green', // Set a different color for holidays
+            borderColor: 'green', // Set the border color
+        },
+        {
+            title: 'Christmas Day',
+            start: '2024-12-25',
             allDay: true,
             backgroundColor: 'green', // Set a different color for holidays
             borderColor: 'green', // Set the border color
